@@ -1,4 +1,4 @@
-release_repo_url: git@github.com:ros2-gbp/ros2_message_filters-release
+release_repo_url: git@github.com:revyos-ros/ros2_message_filters-release.git
 tracks:
   bouncy:
     actions:

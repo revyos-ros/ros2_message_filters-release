@@ -64,8 +64,8 @@ void callback(const sensor_msgs::CameraInfo::ConstPtr&, const sensor_msgs::Image
  *
  */
 
-#ifndef MESSAGE_FILTERS__SYNC_POLICIES__LATEST_TIME_H_
-#define MESSAGE_FILTERS__SYNC_POLICIES__LATEST_TIME_H_
+#ifndef MESSAGE_FILTERS__SYNC_LATEST_TIME_H_
+#define MESSAGE_FILTERS__SYNC_LATEST_TIME_H_
 
 #include <algorithm>
 #include <memory>
@@ -255,7 +255,14 @@ private:
     {
       bool step_change_detected = false;
       do {
-        double period = (now-prev).seconds();
+        double period = 0.0;
+        try {
+          period = (now-prev).seconds();
+        } catch (const std::runtime_error & /*e*/) {
+          // Different time sources that might happen on initialization if the messages are not yet available.
+          // std::cout << "Exception: " << e.what() << std::endl;
+          return false;
+        }
         if (period <= 0.0) {
           // multiple messages and time isn't updating
           return false;
@@ -386,4 +393,4 @@ private:
 }  // namespace sync
 }  // namespace message_filters
 
-#endif // MESSAGE_FILTERS__SYNC_POLICIES__LATEST_TIME_H_
+#endif // MESSAGE_FILTERS__SYNC_LATEST_TIME_H_
